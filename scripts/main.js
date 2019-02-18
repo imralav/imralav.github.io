@@ -5,14 +5,15 @@ var network = null;
 
 function draw() {
 // create an array with nodes
+    let linkedInNodeId = 34;
+    let githubNodeId = 35;
     nodes = new vis.DataSet([
         {id: 1, label: 'Tomasz\nKarczewski', group: 'root'},
         {id: 2, label: 'Education', group: 'education'},
         {id: 3, label: 'Work experience', group: 'experience'},
         {id: 4, label: 'Knowledge & skills', group: 'qualifications'},
         {id: 5, label: 'Hobbies', group: 'hobbies'},
-        {id: 6, label: 'Personal information', group: 'personal'},
-        {id: 7, shape: 'circularImage', image: ASSETS_DIR + 'photo.png', group: 'personal'},
+        {id: 7, shape: 'circularImage', image: ASSETS_DIR + 'photo.png', group: 'personal', size: 80},
         {id: 8, label: '27.01.1992', group: 'personal'},
         {id: 9, label: 'imralav@gmail.com', group: 'personal'},
         {id: 10, label: 'Backend developer\n(2015-2017)', group: 'experience'},
@@ -38,7 +39,9 @@ function draw() {
         {id: 30, label: 'Books, movies', group: 'hobbies'},
         {id: 31, label: 'Tabletop and roleplaying games', group: 'hobbies'},
         {id: 32, label: 'Gym, Inline-skating', group: 'hobbies'},
-        {id: 33, label: 'Jigsaw puzzles', group: 'hobbies'}
+        {id: 33, label: 'Jigsaw puzzles', group: 'hobbies'},
+        {id: linkedInNodeId, shape: 'image', image: ASSETS_DIR + 'In-White-34px-R.png', group: 'personal'},
+        {id: githubNodeId, shape: 'circularImage', image: ASSETS_DIR + 'GitHub-Mark-Light-64px.png', group: 'personal'}
     ]);
 
 // create an array with edges
@@ -48,9 +51,9 @@ function draw() {
         {from: 1, to: 4},
         {from: 1, to: 5},
         {from: 1, to: 6},
-        {from: 6, to: 7},
-        {from: 6, to: 8},
-        {from: 6, to: 9},
+        {from: 1, to: 7},
+        {from: 7, to: 8},
+        {from: 7, to: 9},
         {from: 3, to: 10},
         {from: 3, to: 11},
         {from: 2, to: 12},
@@ -69,12 +72,14 @@ function draw() {
         {from: 4, to: 25},
         {from: 4, to: 26},
         {from: 4, to: 27},
-        {from: 6, to: 28},
+        {from: 7, to: 28},
         {from: 5, to: 29},
-        {from: 29, to: 30},
-        {from: 29, to: 31},
+        {from: 5, to: 30},
+        {from: 5, to: 31},
         {from: 5, to: 32},
-        {from: 5, to: 33}
+        {from: 5, to: 33},
+        {from: 7, to: linkedInNodeId},
+        {from: 7, to: githubNodeId}
     ]);
 
 // create a network
@@ -84,22 +89,134 @@ function draw() {
         edges: edges
     };
     var options = {
+        interaction: {
+            hover: true,
+            hoverConnectedEdges: true
+        },
         nodes: {
-            borderWidth: 4,
-            size: 30,
-            margin: 50,
+            borderWidth: 1,
+            borderWidthSelected: 1,
+            margin: 10,
+            chosen: true,
+            labelHighlightBold: false,
             color: {
-                border: '#222222',
-                background: '#666666'
+                border: '#9f9f9f',
+                background: '#585858',
+                highlight: {
+                    border: '#9f9f9f',
+                    background: '#585858'
+                },
+                hover: {
+                    border: '#adadad',
+                    background: '#636363'
+                }
             },
             font: {color: '#eeeeee'},
+            shape: 'box',
             shapeProperties: {
+                borderRadius: 25,
                 useBorderWithImage:true
             }
         },
         edges: {
-            color: '#b2ebff'
+            width: 1,
+            hoverWidth: 1,
+            chosen: false,
+            color: '#b2ebff',
+            smooth: {
+                enabled: true,
+                type: "dynamic",
+                roundness: 0.75
+            }
+        },
+        groups: {
+            root: {
+                fixed: true,
+                font: {
+                    size: 20
+                }
+            },
+            education: {
+                color: {
+                    border: '#5f9f40',
+                    background: '#31581d',
+                    highlight: {
+                        border: '#5f9f40',
+                        background: '#31581d'
+                    },
+                    hover: {
+                        border: '#6ab248',
+                        background: '#3f7125'
+                    }
+                }
+            },
+            experience: {
+                color: {
+                    border: '#fffdbf',
+                    background: '#62624f',
+                    highlight: {
+                        border: '#fffdbf',
+                        background: '#62624f'
+                    },
+                    hover: {
+                        border: '#ffffca',
+                        background: '#797962'
+                    }
+                }
+            },
+            qualifications: {
+                color: {
+                    border: '#9f2126',
+                    background: '#581b1f',
+                    highlight: {
+                        border: '#9f2126',
+                        background: '#581b1f'
+                    },
+                    hover: {
+                        border: '#b4252b',
+                        background: '#712328'
+                    }
+                }
+            },
+            hobbies: {
+                color: {
+                    border: '#333a9f',
+                    background: '#202658',
+                    highlight: {
+                        border: '#333a9f',
+                        background: '#202658'
+                    },
+                    hover: {
+                        border: '#373eab',
+                        background: '#272e6a'
+                    }
+                }
+            },
+            personal: {
+                font: {
+                    color: "#000000"
+                },
+                color: {
+                    border: '#d9e1e4',
+                    background: '#becdd1',
+                    highlight: {
+                        border: '#d9e1e4',
+                        background: '#becdd1'
+                    },
+                    hover: {
+                        border: '#e1e9ec',
+                        background: '#c3d3d7'
+                    }
+                }
+            }
         }
     };
     network = new vis.Network(container, data, options);
+    network.on('click', function(event) {
+        if(event.nodes.indexOf(linkedInNodeId) !== -1) {
+            window.open('https://www.linkedin.com/in/tomasz-karczewski-a37909159/', '_blank')
+        } else if(event.nodes.indexOf(githubNodeId) !== -1) {
+            window.open('https://github.com/imralav', '_blank')
+        }
+    });
 }
